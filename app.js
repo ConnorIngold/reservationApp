@@ -5,9 +5,11 @@ const ul = document.getElementById('invitedList');
 
 function createLI(text) {
 	const li = document.createElement('li');
+	const span = document.createElement('span');
 	// There are no li elements in the html so this method creates them and stores
 	// them in the li variable
-	li.textContent = text;
+	span.textContent = text;
+	li.appendChild(span);
 	// this make it so the input from the user is turned in a li element
 	const label = document.createElement('label');
 	// creating a label
@@ -86,12 +88,27 @@ ul.addEventListener('change', e => {
 ul.addEventListener('click', e => {
 	if (e.target.tagName === 'BUTTON') {
 		const button = e.target;
+		const li = button.parentNode
+		const ul = li.parentNode
 		if (e.target.textContent === 'remove') {
 			const li = e.target.parentNode;
 			const ul = li.parentNode;
 			ul.removeChild(li);
-		} else if (e.target.textContent === 'edit') {
-			console.log('edit');
+		} else if (button.textContent === 'edit') {
+			const span = li.firstElementChild;
+			const input = document.createElement('input');
+			input.type = 'text';
+			input.value = span.textContent;
+			li.insertBefore(input, span);
+			li.removeChild(span);
+			button.textContent = 'save';
+		} else if (button.textContent === 'save') {
+			const input = li.firstElementChild;
+			const span = document.createElement('span');
+			span.textContent = input.value;
+			li.insertBefore(span, input);
+			li.removeChild(input);
+			button.textContent = 'edit';
 		}
 	}
 });
